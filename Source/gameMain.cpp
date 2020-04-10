@@ -19,7 +19,7 @@ void _gameMain::init()
 }
 void _gameMain::update()
 {
-	static int sp=5;
+	static int sp=10;
 	if (KeyLeft.pressed())  map.scr.x+=sp;
 	if (KeyRight.pressed()) map.scr.x-=sp;
 	if (KeyUp.down())       sp+=5;
@@ -38,21 +38,18 @@ void _gameMain::draw()
 void _gameMain::mapDraw()
 {
 	Size mapSize(map.width() * MAP_CHIPSIZE, map.height() * MAP_CHIPSIZE);
-	mapTexture.resized(mapSize);
-	// = RenderTexture(mapSize, ColorF(0.1));
+	mapTexture = RenderTexture(mapSize, ColorF(0.1));
 	ScopedRenderTarget2D target(mapTexture);
 	for (auto y : step(map.height()))
 	for (auto x : step(map.width()))
 	{
-		int mapStat = map[y][x];
+		int mapStat = map.get(y, x);
 		if (mapStat != 0)
 		{
 			HSV col(mapStat * (360/9), 0.5);
 			col = ColorF(0.1, 0.2, 0.6);
 			Rect((x*MAP_CHIPSIZE), y * MAP_CHIPSIZE, MAP_CHIPSIZE, MAP_CHIPSIZE)
 				.draw(col);
-		}else
-			Rect((x*MAP_CHIPSIZE), y * MAP_CHIPSIZE, MAP_CHIPSIZE, MAP_CHIPSIZE)
-				.draw(ColorF(1));
+		}
 	}
 }

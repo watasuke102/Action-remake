@@ -112,6 +112,7 @@
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\player.cpp" />
     <ClCompile Include="Source\gameMain.cpp" />
+    <ClCompile Include="Source\mapData.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="App\engine\texture\box-shadow\128.png" />

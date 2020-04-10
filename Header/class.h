@@ -13,11 +13,11 @@ public:
 	void init(int i,int j){ map = Grid<int>(i, j, 0); }
 
 	//get
+	void CheckHitState();
 	inline  int width() { return map.width(); }
 	inline  int height() { return map.height(); }
 	inline  int size() { return map.size_bytes(); }
 	inline Vec2 getPlayerSpeed() { return playersp; }
-	inline int* operator[](int y) { if(y>0 && y<map.height()) return map[y]; }
 	inline int get(int y, int x)
 	{
 		if ( (y<0||y>map.height()) || (x<0 || x>map.width()) )
