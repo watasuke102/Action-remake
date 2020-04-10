@@ -5,33 +5,29 @@ class _mapData
 {
 private:
 	Grid<int> map;
-	Vec2 playersp;
+	RenderTexture mapTexture;
+	RenderTexture origin;
 
 public:
 	Vec2 scr;
-	_mapData() { init(0, 0); }
-	void init(int i,int j){ map = Grid<int>(i, j, 0); }
+	_mapData() { init(); }
+	void init();
+	void update();
+	void draw();
 
 	//get
-	void CheckHitState();
-	inline  int width() { return map.width(); }
-	inline  int height() { return map.height(); }
-	inline  int size() { return map.size_bytes(); }
-	inline Vec2 getPlayerSpeed() { return playersp; }
-	inline int get(int y, int x)
-	{
-		if ( (y<0||y>map.height()) || (x<0 || x>map.width()) )
-			return 0;
-		return map[y][x];
-	}
+	inline int get(int, int);
+	inline int width() { return map.width(); }
+	inline int height() { return map.height(); }
+	inline int size() { return map.size_bytes(); }
+	inline int textureWidth() { return mapTexture.width(); }
+
 	//set
-	void setPlayerSpeed(Vec2 a) { playersp = a; }
-	void set(int y, int x, int n)
-	{
-		if (y<0 || y>map.height() || x<0 || x>map.width())
-			return;
-		map[y][x] = n;
-	}
+	void set(int, int, int);
+
+	//当たり判定
+	bool checkHit(int,int);
+	_mapHitState checkMapHitState(Vec2, Vec2, Rect);
 };
 
 class _player
@@ -78,5 +74,5 @@ public:
 	void update();
 	void draw();
 
-	void mapDraw();
+	//void mapDraw();
 };

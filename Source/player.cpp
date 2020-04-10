@@ -76,14 +76,47 @@ void _player::dash()
 }
 void _player::move()
 {
-	map->scr.x -= speed.x;
+	int sp;
+	//シフトキーで速度アップ
+	if (KeyShift.pressed())
+		sp = PLAYER_HIGHSPEED;
+	else sp = PLAYER_SPEED;
+	//左右移動
+	if(!dashing)
+	{
+		if (KeyLeft.pressed())  speed.x = -sp;
+		if (KeyRight.pressed()) speed.x =  sp;
+	}
+
 	pos.y -= speed.y;
 	//重力
 	speed.y--;
+	/**
 	if (pos.y >= 900-hitBox.size.y)
 	{
 		jumpCnt = 0;
 		pos.y = 900-hitBox.size.y;
 		speed.y = 0;
 	}
+	/**/
+	//当たり判定
+	_mapHitState hit = map->checkMapHitState(pos-map->scr, speed, hitBox);
+	Print << U"top:{},bottom:{},right:{},left:{}"_fmt(hit.top,hit.bottom,hit.right,hit.left);
+	if(hit.bottom)
+		jumpCnt = 0;
+	if(hit.top || hit.bottom)
+	{
+		speed.y = 0;
+	}
+	if(hit.left || hit.right)
+	{
+		speed.x = hit.pos.x-(pos.x-map->scr.x);
+		dashingTime = 20;//次のupdate()でダッシュを終了させる
+	}
+	pos.y = hit.pos.y;
+
+	//移動
+	Print << U"hit{} player{}"_fmt(hit.pos, pos-map->scr);
+	Print << U"playerSpeed" << speed;
+	map->scr.x -= speed.x;
 }

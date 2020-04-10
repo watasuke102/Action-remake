@@ -12,6 +12,7 @@ void Main()
 	int sp = 2;
 	while (System::Update())
 	{
+		ClearPrint();
 		gameMain.update();
 	}
 }
