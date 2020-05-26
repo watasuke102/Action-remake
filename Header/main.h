@@ -2,6 +2,7 @@
 
 ////////////////////////
 //OpenSiv3D-0.4.2
+#include <iostream>
 #include <Siv3D.hpp>
 
 
