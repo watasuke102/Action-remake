@@ -23,16 +23,16 @@ pkg_check_modules(OPENCV4 REQUIRED opencv4)
 
 include_directories(
 	"/usr/include"
-	"./Header"
+	"./inc"
 	"~/Documents/OpenSiv3D/Siv3D/include"
 	"~/Documents/OpenSiv3D/Siv3D/include/ThirdParty"
 )
 
 set(SOURCE_FILES
-	"./Source/Main.cpp"
-	"./Source/mapData.cpp"
-	"./Source/gameMain.cpp"
-	"./Source/player.cpp"
+	"./src/Main.cpp"
+	"./src/mapData.cpp"
+	"./src/gameMain.cpp"
+	"./src/player.cpp"
 )
 
 add_executable(Siv3D_App ${SOURCE_FILES})
