@@ -37,6 +37,7 @@ class _player
 		Texture pic;
 		Vec2 pos, speed;
 		RectF hitBox;
+		String debug;
 
 		//ジャンプ
 		bool wasSpacePressed;
