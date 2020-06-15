@@ -17,6 +17,7 @@ public:
 
 	//get
 	inline int get(int, int);
+	inline int get(Point);
 	inline int width() { return map.width(); }
 	inline int height() { return map.height(); }
 	inline int size() { return map.size_bytes(); }
@@ -68,7 +69,6 @@ private:
 	_player player;
 
 	_mapData map;
-	RenderTexture mapTexture;
 public:
 	_gameMain() { init(); }
 	void init();

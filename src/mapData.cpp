@@ -22,11 +22,12 @@ void _mapData::init()
 			Rect(x * MAP_CHIPSIZE, y * MAP_CHIPSIZE, MAP_CHIPSIZE, MAP_CHIPSIZE)
 				.draw(ColorF(0.4, 0.2, 0.6));
 	}
-	origin = mapTexture;
+	Shader::Copy(mapTexture, origin);
 }
 
 void _mapData::update()
 {
+	Shader::Copy(origin, mapTexture);
 	if( scr.x > 0) scr.x = 0;
 	if( scr.x < WINDOW_X-textureWidth())
 		scr.x = WINDOW_X-textureWidth();
@@ -36,7 +37,7 @@ void _mapData::update()
 void _mapData::draw()
 {
 	mapTexture.draw(scr);
-	mapTexture = origin;
+	mapTexture.clear(Palette::Gray);
 }
 
 
@@ -45,6 +46,12 @@ inline int _mapData::get(int y, int x)
 	if ( (y<0||y>map.height()) || (x<0 || x>map.width()) )
 		return 0;
 	return map[y][x];
+}
+inline int _mapData::get(Point p)
+{
+	if ( (p.y<0||p.y>map.height()) || (p.x<0 || p.x>map.width()) )
+		return 0;
+	return map[p.y][p.x];
 }
 void _mapData::set(int y, int x, int n)
 {
@@ -64,9 +71,30 @@ _mapHitState _mapData::checkMapHitState(Vec2 pos, Vec2 speed, Rect hitBox)
 	Size size(hitBox.size);
 	int left = pos.x/MAP_CHIPSIZE,  right = (pos.x + size.x)/MAP_CHIPSIZE;
 	int  top = pos.y/MAP_CHIPSIZE, bottom = (pos.y + size.y)/MAP_CHIPSIZE;
-
+	Point checkPos[4] =
+	{
+		Point(left,  top), Point(left, bottom),
+		Point(right, top), Point(right, bottom)
+	};
 	hit.pos = pos;
-
+	Rect box;
+	for(auto i: step(4))
+	{
+		if(get(checkPos[i]))
+		{
+			Print << U"GET IS TRUE: " << i;
+			ScopedRenderTarget2D a(mapTexture);
+			box = Rect(checkPos[i].x * MAP_CHIPSIZE, checkPos[i].y * MAP_CHIPSIZE, MAP_CHIPSIZE);
+			Rect((checkPos[i].x*MAP_CHIPSIZE ), checkPos[i].y*MAP_CHIPSIZE, MAP_CHIPSIZE)
+				.draw(HSV(90 * i, 1.0, 0.7));
+			if(const auto points = box.intersectsAt(hitBox))
+			{
+				Print << U"POINT ACTIVE: " << i;
+				for(const auto& point : points.value())
+					Circle(point, 5).draw(Palette::Magenta);
+			}
+		}
+	}
 	return hit;
 }
 /**
