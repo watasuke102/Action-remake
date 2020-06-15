@@ -62,49 +62,10 @@ _mapHitState _mapData::checkMapHitState(Vec2 pos, Vec2 speed, Rect hitBox)
 {
 	_mapHitState hit;
 	Size size(hitBox.size);
-	int left = pos.x/MAP_CHIPSIZE, center = (pos.x + size.x/2)/MAP_CHIPSIZE,  right = (pos.x + size.x)/MAP_CHIPSIZE;
-	int  top = pos.y/MAP_CHIPSIZE, middle = (pos.y + size.y/2)/MAP_CHIPSIZE, bottom = (pos.y + size.y)/MAP_CHIPSIZE;
+	int left = pos.x/MAP_CHIPSIZE,  right = (pos.x + size.x)/MAP_CHIPSIZE;
+	int  top = pos.y/MAP_CHIPSIZE, bottom = (pos.y + size.y)/MAP_CHIPSIZE;
 
 	hit.pos = pos;
-	//////////////////////////////
-	//横方向
-	{
-		//左に移動中
-		if(speed.x<0)
-			if(get(middle,left))
-			{
-				hit.left  = true;
-				hit.pos.x = left*MAP_CHIPSIZE + MAP_CHIPSIZE;
-			}
-		//右に移動中
-		if(speed.x>0)
-			if(get(middle,right))
-			{
-				hit.right = true;
-				hit.pos.x = right*MAP_CHIPSIZE - size.x;
-			}
-	}
-	////////////////////////////
-	//縦方向
-	{
-		//上昇中
-		if(speed.y>0)
-			//左上、真上、右上いずれかに接触していた場合
-			if(get(top,left) || get(top,center) || get(top,right))
-			{
-				hit.top   = true;
-				hit.pos.y = top*MAP_CHIPSIZE + size.y;
-			}
-		//落下中
-		if(speed.y<0)
-			if(get(bottom,left) || get(bottom,center) || get(bottom,right))
-			{
-				hit.bottom = true;
-				hit.pos.y  = bottom*MAP_CHIPSIZE - size.y;
-			}
-	}
-	//当たり判定終わり
-	///////////////////////////
 
 	return hit;
 }
