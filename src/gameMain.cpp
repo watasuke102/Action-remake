@@ -4,7 +4,6 @@ void _gameMain::init()
 {
 	map.init();
 	player.init(&map);
-	//mapDraw();
 }
 void _gameMain::update()
 {
