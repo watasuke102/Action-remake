@@ -4,40 +4,43 @@ void _mapData::init()
 {
 	scr.set(0, 0);
 	mapTexture = RenderTexture(width()*MAP_CHIPSIZE, height()*MAP_CHIPSIZE, Palette::Black);
-	ScopedRenderTarget2D a(mapTexture);
+	origin     = RenderTexture(width()*MAP_CHIPSIZE, height()*MAP_CHIPSIZE, Palette::Black);
 
-	//読み込み
+	//読み込み+書き込み
 	const CSVData csv(U"Data/map.csv");
 	int heightCSV = csv.columns(0);
 	int  widthCSV = csv.rows();
 	map = Grid<int>(heightCSV, widthCSV);
 
-	for (auto y : step( height() ))
-	for (auto x : step(  width() ))
 	{
-		int n = Parse<int>(csv[y][x]);
-		set(y, x, n);
-		//mapTexture描画
-		if (get(y, x) != 0)
-			Rect(x * MAP_CHIPSIZE, y * MAP_CHIPSIZE, MAP_CHIPSIZE, MAP_CHIPSIZE)
-				.draw(ColorF(0.4, 0.2, 0.6));
+		ScopedRenderTarget2D a(mapTexture);
+		for (auto y : step( height() ))
+		for (auto x : step(  width() ))
+		{
+			int n = Parse<int>(csv[y][x]);
+			set(y, x, n);
+			//mapTexture描画
+			if (get(y, x) != 0)
+				Rect(x * MAP_CHIPSIZE, y * MAP_CHIPSIZE, MAP_CHIPSIZE, MAP_CHIPSIZE)
+					.draw(ColorF(0.4, 0.2, 0.6));
+		}
 	}
-	Shader::Copy(mapTexture, origin);
 }
 
 void _mapData::update()
 {
-	Shader::Copy(origin, mapTexture);
+	if(!origin) Shader::Copy(mapTexture, origin);
+	//Shader::Copy(origin, mapTexture);
 	if( scr.x > 0) scr.x = 0;
 	if( scr.x < WINDOW_X-textureWidth())
 		scr.x = WINDOW_X-textureWidth();
-	Print << U"scr={}"_fmt(scr);
+	//Print << U"scr={}"_fmt(scr);
 }
 
 void _mapData::draw()
 {
 	mapTexture.draw(scr);
-	mapTexture.clear(Palette::Gray);
+	origin.draw(scr,ColorF(0.7, 0, 0, 0.5));
 }
 
 
@@ -82,7 +85,7 @@ _mapHitState _mapData::checkMapHitState(Vec2 pos, Vec2 speed, Rect hitBox)
 	{
 		if(get(checkPos[i]))
 		{
-			Print << U"GET IS TRUE: " << i;
+			//Print << U"GET IS TRUE: " << i;
 			ScopedRenderTarget2D a(mapTexture);
 			box = Rect(checkPos[i].x * MAP_CHIPSIZE, checkPos[i].y * MAP_CHIPSIZE, MAP_CHIPSIZE);
 			Rect((checkPos[i].x*MAP_CHIPSIZE ), checkPos[i].y*MAP_CHIPSIZE, MAP_CHIPSIZE)
