@@ -15,5 +15,5 @@ void Main()
 		ClearPrint();
 		gameMain.update();
 	}
-}
 /**/
+}
