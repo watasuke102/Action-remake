@@ -102,5 +102,5 @@ void _player::move()
 		speed.y = 0;
 	}
 
-	_mapHitState hit = map->checkMapHitState(pos-map->scr, speed, hitBox);
+	map->checkMapHitState(pos-map->scr, speed, hitBox);
 }

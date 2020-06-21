@@ -28,7 +28,7 @@ public:
 
 	//当たり判定
 	bool checkHit(int,int);
-	_mapHitState checkMapHitState(Vec2, Vec2, Rect);
+	void checkMapHitState(Vec2, Vec2, Rect);
 };
 
 class _player
