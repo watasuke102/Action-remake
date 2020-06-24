@@ -1,7 +1,7 @@
 #pragma once
 
 ////////////////////////
-//OpenSiv3D-0.4.2
+//OpenSiv3D-0.4.3
 #include <iostream>
 #include <Siv3D.hpp>
 

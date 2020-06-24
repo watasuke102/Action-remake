@@ -102,5 +102,16 @@ void _player::move()
 		speed.y = 0;
 	}
 
-	map->checkMapHitState(pos-map->scr, speed, hitBox);
+	_mapHitState hit=map->checkMapHitState(pos, speed, hitBox);
+	Print << U"top:{},bottom:{},right:{},left:{}"_fmt(hit.top, hit.bottom, hit.right, hit.left);
+
+	if(hit.bottom)
+		jumpCnt = 0;
+	if(hit.top || hit.bottom)
+		speed.y = 0;
+	if(hit.left || hit.right)
+	{
+		//speed.x = map->scr.x - (pos.x - hit.pos.x);
+		dashingTime = 20;//次のupdate()でダッシュを終了させる
+	}
 }
